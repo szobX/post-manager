@@ -2,24 +2,17 @@
   <div id="app">
     <div class="wrapper">
         <div v-if="!isLoaded" >LOADED</div>
+        <div class="pagination"></div>
       <h2 class="appTitle">Post Manager</h2>
-        {{currentPage}}
         <div class="pagination">
-
         <button @click="prevPage()" :disabled="currentPage === 0">PREV</button>
+            <div class="items">
+                <div class="pagination__item" :class="{active:currentPage+1 === n}"  v-for="n in parseInt(posts.length / jump)" :key="n">{{n}}</div>
+            </div>
         <button @click="nextPage()"  >NEXT</button>
     </div>
       <div class="postWrapper">
-          <div  v-for="post in pageContent" :key="post.id"  class="postWrapper__item">
-              <div  @click="removePost(post.id)" class="delete"></div>{{post.id}}
-              <h4 class="name">{{post.name}}</h4>
-            <p class="title">{{post.title}}</p>
-            <p>
-             {{post.body}}
-<!--                {{cutContent(post.body)}}-->
-            </p>
-              <button @click="cutContent(post.body)" class="more">Read more</button>
-          </div>
+          <PostItem :loadLess="loadLess"  v-for="post in pageContent" :post="post" :key="post.id"  />
       </div>
 
     </div>
@@ -28,9 +21,11 @@
 
 <script>
 import axios from 'axios';
+import PostItem from "./components/PostItem";
 export default {
   name: 'app',
   components: {
+      PostItem,
   },
   data(){
     return{
@@ -54,19 +49,13 @@ export default {
     },
     async mounted() {
         const res = await Promise.all([this.fetchPosts(), this.fetchUsers()]);
-/*
-        wyciagnac potrzebne wartosci!!
-        console.log({...123,{...res[1].data.find(({id})=> id===2)}});*/
+
         this.posts = ([...res[0].data.map(post=> ({
             ...post,
             ...this.takeDataFromUser(res[1].data.find(({id})=> id===post.userId)),
         }))]);
 
         this.isLoaded = !this.isLoaded;
-
-
-        /* this.posts = [...res[0].data];
-         this.users = [...res[1].data];*/
 
     },
     methods:{
@@ -99,11 +88,11 @@ export default {
                 this.error = err;
             }
         },
-        cutContent(content){
-            console.log(`${content.slice(0,40)}...`);
+        loadLess(content){
             return`${content.slice(0,40)}...`;
         },
         nextPage(){
+          if((this.posts.length/this.jump)-2< this.currentPage) return;
             this.currentPage++;
         },
         prevPage(){
@@ -219,4 +208,27 @@ export default {
             background: #6899ff;
         }
     }
+
+  .pagination{
+      width: 100%;
+      justify-content: center;
+      display: flex;
+
+      &__item{
+    padding:2px 3px;
+          &.active{
+              background:#6899ff;
+              border-radius: 5px;
+              color:#fff;
+              transition: .4s linear;
+          }
+      }
+    .items{
+        background: aliceblue;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin:0 10px;
+        display: flex;
+    }
+  }
 </style>
