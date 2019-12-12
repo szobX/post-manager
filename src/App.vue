@@ -5,11 +5,13 @@
       <h2 class="appTitle">Post Manager</h2>
         {{currentPage}}
         <div class="pagination">
+
         <button @click="prevPage()" :disabled="currentPage === 0">PREV</button>
         <button @click="nextPage()"  >NEXT</button>
     </div>
       <div class="postWrapper">
           <div  v-for="post in pageContent" :key="post.id"  class="postWrapper__item">
+              <div  @click="removePost(post.id)" class="delete"></div>{{post.id}}
               <h4 class="name">{{post.name}}</h4>
             <p class="title">{{post.title}}</p>
             <p>
@@ -58,8 +60,6 @@ export default {
         this.posts = ([...res[0].data.map(post=> ({
             ...post,
             ...this.takeDataFromUser(res[1].data.find(({id})=> id===post.userId)),
-
-
         }))]);
 
         this.isLoaded = !this.isLoaded;
@@ -70,6 +70,11 @@ export default {
 
     },
     methods:{
+      removePost(remId){
+          const index = this.posts.findIndex(({id})=> id===remId);
+          this.posts.splice(index,1);
+      }
+      ,
         takeDataFromUser(obj){
           const {name, } = obj;
           return {name};
@@ -159,6 +164,35 @@ export default {
           margin:20px 0px;
           background: aliceblue;
           padding: 5px 15px;
+          position: relative;
+          box-shadow:
+                  0 12.5px 10px rgba(0, 0, 0, 0.035),
+                  0 100px 80px rgba(0, 0, 0, 0.07)
+      ;
+
+          .delete{
+              position: absolute;
+              top:15px;
+              right:15px;
+              width: 30px;
+              height: 30px;
+
+              &:after,&:before{
+                  content:'';
+                  height:2px;
+                  width:80%;
+                  position: absolute;
+                  top:50%;
+                  background: darkred;
+              }
+              &:after{
+                  transform: rotate(-45deg);
+              }
+              &:before{
+                  transform: rotate(45deg);
+              }
+          }
+
       }
   }
     .more{
