@@ -2,20 +2,25 @@
   <div id="app">
     <div class="wrapper">
         <div v-if="!isLoaded" >LOADED</div>
-        <div class="pagination"></div>
+
       <h2 class="appTitle">Post Manager</h2>
         <div class="pagination">
-        <button @click="prevPage()" :disabled="currentPage === 0">PREV</button>
+
+        <button @click="prevPage()" class="pagination__item pagination__item--btn"   :disabled="currentPage === 0"> &lt; Prev </button>
             <div class="items">
-                <div class="pagination__item" :class="{active:currentPage+1 === n}"  v-for="n in parseInt(posts.length / jump)" :key="n">{{n}}</div>
+                <button @click="currentPage = n-1"  class="pagination__item" :class="{active:currentPage+1 === n}"  v-for="n in parseInt(posts.length / jump)" :key="n">{{n}}</button>
+
             </div>
-        <button @click="nextPage()"  >NEXT</button>
+        <button @click="nextPage()" class="pagination__item  pagination__item--btn">  Next &gt; </button>
     </div>
       <div class="postWrapper">
-          <PostItem :loadLess="loadLess"  v-for="post in pageContent" :post="post" :key="post.id"  />
+          <PostItem :loadLess="loadLess"  @remove-post="removePost($event)"  v-for="post in pageContent" :post="post" :key="post.id"  />
       </div>
-
+        <footer>
+            <p>Patryk Szober 2019</p>
+        </footer>
     </div>
+
   </div>
 </template>
 
@@ -108,14 +113,15 @@ export default {
 
 <style lang="scss">
 
-  @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap');
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600&display=swap');
+
   body{
     margin:0;
     padding:0;
     width:100%;
-    background: #c9dfff;
+    background:$primary; /*#EDF2F7;*/
     color:#000000;
-    font-family: 'Open Sans',sans-serif;
+    font-family: 'Montserrat',sans-serif;
   }
   *{
     box-sizing: border-box;
@@ -123,112 +129,75 @@ export default {
   .appTitle{
     opacity: .8;
   }
-  .title{
-      font-size: 15px;
-      font-weight: bold;
-      font-style: italic;
-      opacity: 0.6;
-  }
-  .name{
-  }
 .wrapper{
     width:100%;
+    max-width: 1440px;
+    /*max-width: 1140px;*/
     margin: 0 auto;
   text-align: center;
     display: flex;
     flex-direction: column;
     padding:10px 0;
+    @media(min-width:1024px){
+
+    }
 }
 
   .postWrapper{
       width:100%;
-      padding: 3%;
+
+      padding: 2%;
       text-align: left;
         display: flex;
         flex-direction: column;
 
-      &__item{
-          flex:1;
-          border-radius: 10px;
-          margin:20px 0px;
-          background: aliceblue;
-          padding: 5px 15px;
-          position: relative;
-          box-shadow:
-                  0 12.5px 10px rgba(0, 0, 0, 0.035),
-                  0 100px 80px rgba(0, 0, 0, 0.07)
-      ;
 
-          .delete{
-              position: absolute;
-              top:15px;
-              right:15px;
-              width: 30px;
-              height: 30px;
-
-              &:after,&:before{
-                  content:'';
-                  height:2px;
-                  width:80%;
-                  position: absolute;
-                  top:50%;
-                  background: darkred;
-              }
-              &:after{
-                  transform: rotate(-45deg);
-              }
-              &:before{
-                  transform: rotate(45deg);
-              }
-          }
-
-      }
-  }
-    .more{
-        background: transparent;
-        border:none;
-        font-weight: 600;
-        position: relative;
-        padding:15px 10px;
-        display: block;
-        text-align: center;
-        &:hover{
-            &:after{
-                width:100%;
-            }
-        }
-        &:after{
-            content:'';
-            position:absolute;
-            bottom:8px;
-            left:0;
-            transition: width .5s ease-out;
-            height:2px;
-            width:0;
-            background: #6899ff;
-        }
     }
 
   .pagination{
-      width: 100%;
       justify-content: center;
       display: flex;
-
+      flex-direction: column;
+      border-radius: 5px;
+      padding: 10px 20px;
+      /*flex-wrap: wrap;*/
+      align-self: center;
+      background: #ffffff;
+      @media(min-width: 450px){
+          flex-direction: row;
+      }
+      .items{
+          display:flex;
+      }
       &__item{
-    padding:2px 3px;
+          border:none;
+          background: transparent;
+          display: flex;
+        justify-content: center;
+        align-items: center;
+          padding: 7px 8px;
+          &--btn{
+
+
+              @media(max-width: 450px){
+                    &:first-child{
+                        border-bottom: 1px solid #d6d6d6;
+                    }
+                  &:last-child{
+                      border-top: 1px solid #d6d6d6;
+                  }
+
+              }
+           font-weight: 700;
+          }
+
           &.active{
-              background:#6899ff;
-              border-radius: 5px;
+              background: #6899ff;
+              border-radius: 20%;
               color:#fff;
               transition: .4s linear;
           }
       }
-    .items{
-        background: aliceblue;
-        border-radius: 5px;
-        padding: 5px 10px;
-        margin:0 10px;
-        display: flex;
-    }
+
   }
 </style>
