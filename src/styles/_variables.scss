@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600&display=swap');
+
+
+//  **** COLORS
+
+$bg-color:#EDF2F7;
+$light:#FFFFFF;
+$dark:#000000;
+$font:'Montserrat',sans-serif;
+$gray:#d6d6d6;
+
+
+// **** SETTINGS
+$border-radius:5px;
+$max-width:1440px;
+$border-for-pagination:1px solid $gray;
+
+@mixin display-center(){
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+}

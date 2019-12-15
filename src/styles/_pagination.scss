@@ -1,0 +1,45 @@
+@import "variables";
+@import "main";
+
+.pagination{
+  @include display-center;
+  align-self: center;
+  flex-direction: column;
+  border-radius: $border-radius;
+  padding: 10px 20px;
+
+  background: #ffffff;
+  @media(min-width: 450px){
+    flex-direction: row;
+  }
+  .items{
+    display:flex;
+  }
+  &__item{
+    border:none;
+    background: transparent;
+    @include display-center;
+    padding: 7px 8px;
+    &--btn{
+    outline: none;
+      @media(max-width: 450px){
+        &:first-child{
+          border-bottom: $border-for-pagination;
+        }
+        &:last-child{
+          border-top: $border-for-pagination;
+        }
+
+      }
+      font-weight: 700;
+    }
+
+    &.active{
+      background: #6899ff;
+      border-radius: $border-radius;
+      color:#fff;
+      transition: .4s linear;
+    }
+  }
+
+}

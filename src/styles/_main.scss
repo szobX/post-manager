@@ -1,0 +1,35 @@
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  background:$bg-color;
+  color:$dark;
+  font-family: $font;
+}
+*{
+  box-sizing: border-box;
+}
+
+
+.wrapper{
+  width:100%;
+  max-width: $max-width;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding:10px 0;
+
+}
+
+
+.postWrapper{
+  width:100%;
+  padding: 2%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.appTitle{
+  opacity: .8;
+}
